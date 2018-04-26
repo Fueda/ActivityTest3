@@ -1,17 +1,22 @@
 package jp.ac.titech.itpro.sdl.activitytest3;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements View.OnClickListener {
     private final static String TAG = "MainActivity";
     private final static String ACTION_NAME = "jp.ac.titech.itpro.sdl.ACTION_NAME";
+    private final static String NAME_EXTRA = "name";
     private final static int REQ_NAME = 1234;
 
     private TextView answerText;
@@ -34,7 +39,16 @@ public class MainActivity extends AppCompatActivity
         switch (v.getId()) {
         case R.id.go_button:
             Intent intent = new Intent(ACTION_NAME);
-            startActivityForResult(intent, REQ_NAME);
+            PackageManager packageManager = getPackageManager();
+            List activities = packageManager
+                    .queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+            if (activities.size() > 0) {
+                startActivityForResult(intent, REQ_NAME);
+            }
+            else {
+                Toast.makeText(this, getString(R.string.toast_no_activities_format, ACTION_NAME),
+                        Toast.LENGTH_LONG).show();
+            }
             break;
         }
     }
@@ -45,7 +59,7 @@ public class MainActivity extends AppCompatActivity
         switch (reqCode) {
         case REQ_NAME:
             if (resCode == RESULT_OK) {
-                String name = data.getStringExtra("name");
+                String name = data.getStringExtra(NAME_EXTRA);
                 if (name != null && name.length() > 0) {
                     answerText.setText(getString(R.string.answer_text_format, name));
                 }
