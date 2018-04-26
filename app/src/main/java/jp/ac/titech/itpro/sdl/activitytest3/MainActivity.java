@@ -15,7 +15,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements View.OnClickListener {
     private final static String TAG = "MainActivity";
-    private final static String ACTION_NAME = "jp.ac.titech.itpro.sdl.ACTION_NAME";
+    private final static String ACTION_NAMEINPUT = "jp.ac.titech.itpro.sdl.ACTION_NAMEINPUT";
     private final static String NAME_EXTRA = "name";
     private final static int REQ_NAME = 1234;
 
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "onClick");
         switch (v.getId()) {
         case R.id.go_button:
-            Intent intent = new Intent(ACTION_NAME);
+            Intent intent = new Intent(ACTION_NAMEINPUT);
             PackageManager packageManager = getPackageManager();
             List activities = packageManager
                     .queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity
                 startActivityForResult(intent, REQ_NAME);
             }
             else {
-                Toast.makeText(this, getString(R.string.toast_no_activities_format, ACTION_NAME),
+                Toast.makeText(this, getString(R.string.toast_no_activities_format, ACTION_NAMEINPUT),
                         Toast.LENGTH_LONG).show();
             }
             break;
